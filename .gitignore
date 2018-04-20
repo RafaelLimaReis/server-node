@@ -1,2 +1,7 @@
+# PASTAS DESNECESSARIAS PARA GIT
+
 node_modules
 .vscode
+
+# ARQUIVOS PROTEGIDOS
+.env
