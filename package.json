@@ -1,0 +1,34 @@
+{
+  "name": "chat-e-api-com-node",
+  "version": "0.0.1",
+  "description": "chat e api em node para tcc",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RafaelLimaReis/server-node.git"
+  },
+  "keywords": [
+    "node",
+    "server",
+    "chat",
+    "socket.io",
+    "api"
+  ],
+  "author": "Rafael Lima, Vinicius Marques",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RafaelLimaReis/server-node/issues"
+  },
+  "homepage": "https://github.com/RafaelLimaReis/server-node#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "socket.io": "^2.1.0",
+    "winston": "^2.4.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.3"
+  }
+}
