@@ -4,15 +4,15 @@
 
 Servidor para API e chat para aplicação desenvolvida para TCC
 
-## Dependencias
+## Dependencias (dev)
 
 * Server
   * [Nodemon](https://nodemon.io)
   * [Express](https://expressjs.com/)
+  * [Consign](https://www.npmjs.com/package/consign)
+  * [dotenv-safe](https://www.npmjs.com/package/dotenv-safe)
 * Chat
-  * [Socket io](https://socket.io/)
-  * [Socket io-cliente](https://www.npmjs.com/package/socket.io-client)
-  
+  * [Socket io](https://socket.io/)  
   
 ## Autores
 Rafael Lima Reis  
