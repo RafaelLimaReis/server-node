@@ -10,6 +10,7 @@ module.exports = new winston.Logger({
 });
 
 /**
+ * doc https://github.com/winstonjs/winston
  * Niveis para setar log
  *
  * info     ->   verde
