@@ -12,7 +12,9 @@ const app = require('express')();
  *
  */
 load()
-  .include('./configs/middlewares.js')
+  .include('./configs/db.js')
+  .then('models')
+  .then('./configs/middlewares.js')
   .then('routers')
   .into(app)
 
