@@ -18,6 +18,9 @@ load()
   .then('routers')
   .into(app)
 
+// sync de banco
+app.configs.db.sync();
+
 // start server
 const server = app.listen(process.env.PORT, () => {
   logger.info(`Server start in port ${process.env.PORT}`);
