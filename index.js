@@ -17,7 +17,9 @@ load()
   .into(app)
 
 // start server
-const server = app.listen(process.env.PORT, () => {
+const port = process.env.PORT || 8000;
+
+const server = app.listen(port, () => {
   logger.info(`Server start in port ${process.env.PORT}`);
 });
 
