@@ -6,16 +6,20 @@ module.exports = (sequelize, dataType) => {
       autoIncrement: true
     },
     nome: {
-      type: dataType.STRING(30)
+      type: dataType.STRING(30),
+      allowNull: false
     },
     sobrenome: {
-      type: dataType.STRING(30)
+      type: dataType.STRING(30),
+      allowNull: false
     },
     image: {
-      type: dataType.STRING
+      type: dataType.STRING,
+      allowNull: false
     },
     cpf: {
-      type: dataType.INTEGER
+      type: dataType.INTEGER,
+      allowNull: false
     }
   },
   {
@@ -24,7 +28,7 @@ module.exports = (sequelize, dataType) => {
   }
   );
 
-  User.associate = function (models) {
+  User.associate = (models) => {
     User.hasMany(models.tb_product, { foreignKey: 'id_user' });
   };
 
