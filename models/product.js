@@ -1,5 +1,5 @@
 module.exports = (sequelize, dataType) => {
-  const User = sequelize.define('tb_user', {
+  const Product = sequelize.define('tb_product', {
     id: {
       type: dataType.INTEGER,
       primaryKey: true,
@@ -8,13 +8,7 @@ module.exports = (sequelize, dataType) => {
     nome: {
       type: dataType.STRING(30)
     },
-    sobrenome: {
-      type: dataType.STRING(30)
-    },
-    image: {
-      type: dataType.STRING
-    },
-    cpf: {
+    id_user: {
       type: dataType.INTEGER
     }
   },
@@ -24,9 +18,9 @@ module.exports = (sequelize, dataType) => {
   }
   );
 
-  User.associate = function (models) {
-    User.hasMany(models.tb_product, { foreignKey: 'id_user' });
+  Product.associate = function (models) {
+    Product.belongsTo(models.tb_user, {as: 'tb_product', foreignKey: 'id_user'});
   };
 
-  return User;
+  return Product;
 }

@@ -13,13 +13,9 @@ const app = require('express')();
  */
 load()
   .include('./configs/db.js')
-  .then('models')
   .then('./configs/middlewares.js')
   .then('routers')
   .into(app)
-
-// sync de banco
-app.configs.db.sync();
 
 // start server
 const server = app.listen(process.env.PORT, () => {
