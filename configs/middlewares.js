@@ -1,6 +1,7 @@
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const timeout = require('express-timeout-handler');
+const express = require('express');
 
 const options = {
   timeout: 3000,
@@ -19,6 +20,7 @@ module.exports = (app) => {
   app.use((req, res, next) => {
     next();
   });
+  app.use(express.static('public'));
 
   return app;
 }

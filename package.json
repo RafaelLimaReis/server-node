@@ -4,7 +4,8 @@
   "description": "chat e api em node para tcc",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "npm run apiDoc && nodemon index.js",
+    "apiDoc": "apidoc -i api/routers/ -o public/apidoc"
   },
   "repository": {
     "type": "git",
@@ -36,6 +37,7 @@
     "winston": "~2.4.1"
   },
   "devDependencies": {
+    "apidoc": "^0.17.6",
     "eslint": "~4.19.1",
     "nodemon": "~1.17.3",
     "standard": "^11.0.1"
