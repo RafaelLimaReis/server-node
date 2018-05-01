@@ -5,7 +5,7 @@ const path = require('path');
 let database = null;
 
 const importModels = (sequelize) => {
-  const dir = path.join(__dirname, '../models');
+  const dir = path.join(__dirname, '../api/models');
   let models = [];
 
   fs.readdirSync(dir).forEach(file => {
@@ -45,7 +45,7 @@ module.exports = (app) => {
 
     database.models = importModels(sequelize);
 
-    sequelize.sync({force: true}).done(() => {
+    sequelize.sync().done(() => {
       return database;
     });
   };

@@ -5,11 +5,15 @@ module.exports = (sequelize, dataType) => {
       primaryKey: true,
       autoIncrement: true
     },
-    nome: {
+    name: {
       type: dataType.STRING(30),
       allowNull: false
     },
-    sobrenome: {
+    lastName: {
+      type: dataType.STRING(30),
+      allowNull: false
+    },
+    password: {
       type: dataType.STRING(30),
       allowNull: false
     },
@@ -19,6 +23,10 @@ module.exports = (sequelize, dataType) => {
     },
     cpf: {
       type: dataType.INTEGER,
+      allowNull: false
+    },
+    token: {
+      type: dataType.STRING,
       allowNull: false
     }
   },
