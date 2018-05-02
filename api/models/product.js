@@ -21,15 +21,9 @@ module.exports = (sequelize, dataType) => {
   );
 
   Product.associate = (models) => {
-    Product.belongsTo(models.tb_user, {as: 'tb_product', foreignKey: 'id_user'});
-  };
-
-  Product.associate = (models) => {
-    Product.hasMany(models.tb_image, { foreignKey: 'id_product' });
-  };
-
-  Product.associate = (models) => {
-    Product.belongsToMany(models.tb_item_wish, { as: 'tb_product', through: 'tb_wish', foreignKey: 'id_product' });
+    models.tb_product.belongsTo(models.tb_user, {as: 'tb_product', foreignKey: 'id_user'});
+    models.tb_product.hasMany(models.tb_image, { foreignKey: 'id_product', as: 'images' });
+    models.tb_product.belongsToMany(models.tb_item_wish, { through: 'tb_wish', foreignKey: 'id_product' });
   };
 
   return Product;
