@@ -1,6 +1,7 @@
 module.exports = (app) => {
   /**
    * @api {get} / Status da API
+   * @apiVerison 0.1
    * @apiGroup Status
    * @apiSuccess {String} message Mensagem de status da API
    * @apiSuccessExample {json} Sucesso
