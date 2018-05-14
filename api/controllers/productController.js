@@ -1,65 +1,109 @@
-const ServiceImages = require('../services/ServiceImages')();
+'use strict';
 
-module.exports = (app) => {
-  const product = app.configs.db.models.tb_product;
-  const image = app.configs.db.models.tb_image;
-  return {
-    all: () => {
-      return new Promise((resolve, reject) => {
-        product.findAll({
-          include: {
-            model: image,
-            as: 'images'
-          }
-        })
-          .then(res => resolve(res))
-          .catch(error => reject(error));
+const ServiceImages = require('../services/ServiceImages');
+
+/**
+ * Class de produtos
+ */
+class productController {
+  /**
+   * Construct class
+   * @param {*} app
+   */
+  constructor (app) {
+    this.serviceImages = new ServiceImages();
+    this.product = app.configs.db.models.tb_product;
+    this.image = app.configs.db.models.tb_image;
+  }
+
+  /**
+   * Função de retorno de todas os produtos
+   */
+  async all () {
+    try {
+      const user = await this.product.findAll({
+        include: {
+          model: this.image,
+          as: 'images'
+        }
       });
-    },
-    create: (data) => {
-      return new Promise((resolve, reject) => {
-        product.create(data)
-          .then(result => resolve(result))
-          .catch(error => reject(error))
-      });
-    },
-    find: (data) => {
-      return new Promise((resolve, reject) => {
-        product.findOne({ where: data,
-          include: {
-            model: image,
-            as: 'images'
-          }
-        })
-          .then(result => resolve(result))
-          .catch(error => reject(error))
-      });
-    },
-    updated: (data) => {
-      return new Promise((resolve, reject) => {
-        product.update(data.body, { where: data.params })
-          .then(result => resolve(result))
-          .catch(error => reject(error))
-      });
-    },
-    destroy: (data) => {
-      return new Promise((resolve, reject) => {
-        product.destroy({ where: data })
-          .then(result => resolve(result))
-          .catch(error => reject(error))
-      });
-    },
-    insertImages: (data) => {
-      let id = data.params.id;
-      let images = data.files;
-      let _data = ServiceImages.insertImages(images, id);
-      return new Promise((resolve, reject) => {
-        _data.map(data => {
-          image.create(data)
-            .then(result => resolve(result))
-            .catch(error => reject(error))
-        });
-      });
+      return user;
+    } catch (e) {
+      throw e;
     }
   }
+
+  /**
+   * Função para criar um produto
+   * @param {array} product
+   */
+  async create (product) {
+    try {
+      await this.product.create(product)
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  /**
+   * Buscar um produto
+   * @param {int} id
+   */
+  find (id) {
+    return new Promise((resolve, reject) => {
+      this.product.findOne({
+        where: id,
+        include: {
+          model: this.image,
+          as: 'images'
+        }
+      })
+        .then(result => resolve(result))
+        .catch(error => reject(error))
+    });
+  }
+
+  /**
+   * Atualizar produto
+   * @param {array} data
+   */
+  updated (data) {
+    return new Promise((resolve, reject) => {
+      this.product.update(data.body, { where: data.params })
+        .then(result => resolve(result))
+        .catch(error => reject(error))
+    });
+  }
+
+  /**
+   * Deletar um produto
+   * @param {int} id
+   */
+  destroy (id) {
+    return new Promise((resolve, reject) => {
+      this.product.destroy({ where: id })
+        .then(result => resolve(result))
+        .catch(error => reject(error))
+    });
+  }
+
+  /**
+   * Inserir imagens do produto
+   * @param {array} data
+   */
+  insertImages (data) {
+    let id = data.params.id;
+    let images = data.files;
+    let _data = this.serviceImages.insertImages(images, id);
+    _data.map(async data => {
+      try {
+        await this.image.create(data);
+      } catch (e) {
+        throw e;
+      }
+    });
+    return data;
+  }
 }
+
+module.exports = productController;
