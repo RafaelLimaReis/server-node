@@ -5,7 +5,7 @@ const express = require('express');
 
 const options = {
   timeout: 3000,
-  onTimeout: function (req, res) {
+  onTimeout: (req, res) => {
     res.status(503).json({ message: 'Service unavailable.' });
   }
 };
