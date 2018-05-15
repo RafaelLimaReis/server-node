@@ -21,7 +21,7 @@ module.exports = (app) => {
   app.route('/products')
     .get(async (req, res, next) => {
       try {
-        let products = await product.al();
+        let products = await product.all();
         res.status(200).json({ data: products, message: 'Products successfully returned' });
       } catch (e) {
         throw e;

@@ -10,8 +10,7 @@ module.exports = (sequelize, dataType) => {
       allowNull: false
     },
     lastName: {
-      type: dataType.STRING(30),
-      allowNull: false
+      type: dataType.STRING(30)
     },
     password: {
       type: dataType.STRING(30),
@@ -19,10 +18,6 @@ module.exports = (sequelize, dataType) => {
     },
     image: {
       type: dataType.STRING,
-      allowNull: false
-    },
-    cpf: {
-      type: dataType.INTEGER,
       allowNull: false
     },
     token: {
