@@ -49,52 +49,55 @@ class productController {
    * Buscar um produto
    * @param {int} id
    */
-  find (id) {
-    return new Promise((resolve, reject) => {
-      this.product.findOne({
+  async find (id) {
+    try {
+      let prod = await this.product.findOne({
         where: id,
         include: {
           model: this.image,
           as: 'images'
         }
-      })
-        .then(result => resolve(result))
-        .catch(error => reject(error))
-    });
+      });
+      return prod;
+    } catch (e) {
+      throw e;
+    }
   }
 
   /**
    * Atualizar produto
    * @param {array} data
    */
-  updated (data) {
-    return new Promise((resolve, reject) => {
-      this.product.update(data.body, { where: data.params })
-        .then(result => resolve(result))
-        .catch(error => reject(error))
-    });
+  async updated (data) {
+    try {
+      let number = await this.product.update(data.body, { where: data.params });
+      return number;
+    } catch (e) {
+      throw e;
+    }
   }
 
   /**
    * Deletar um produto
    * @param {int} id
    */
-  destroy (id) {
-    return new Promise((resolve, reject) => {
-      this.product.destroy({ where: id })
-        .then(result => resolve(result))
-        .catch(error => reject(error))
-    });
+  async destroy (id) {
+    try {
+      let number = this.product.destroy({ where: id });
+      return number;
+    } catch (e) {
+      throw e;
+    }
   }
 
   /**
    * Inserir imagens do produto
    * @param {array} data
    */
-  insertImages (data) {
+  async insertImages (data) {
     let id = data.params.id;
     let images = data.files;
-    let _data = this.serviceImages.insertImages(images, id);
+    let _data = await this.serviceImages.insertImages(images, id);
     _data.map(async data => {
       try {
         await this.image.create(data);

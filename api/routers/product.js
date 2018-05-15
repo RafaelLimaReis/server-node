@@ -1,3 +1,4 @@
+require('express-async-errors');
 const ProductController = require('../controllers/productController');
 const multer = require('multer');
 const crypto = require('crypto');
@@ -20,7 +21,7 @@ module.exports = (app) => {
   app.route('/products')
     .get(async (req, res, next) => {
       try {
-        let products = await product.all();
+        let products = await product.al();
         res.status(200).json({ data: products, message: 'Products successfully returned' });
       } catch (e) {
         throw e;
