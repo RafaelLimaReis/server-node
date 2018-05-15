@@ -1,8 +1,7 @@
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const timeout = require('express-timeout-handler');
-const express = require('express');
-
+const logger = require('../configs/log');
 const options = {
   timeout: 3000,
   onTimeout: (req, res) => {
@@ -17,10 +16,12 @@ module.exports = (app) => {
   }));
   app.use(bodyParser.json());
   app.use(timeout.handler(options));
-  app.use((req, res, next) => {
-    next();
+  app.use((error, req, res, next) => {
+    if (error) {
+      logger.error(error);
+      res.status(500).json({ error: error });
+    } else next();
   });
-  app.use(express.static('public'));
 
   return app;
 }

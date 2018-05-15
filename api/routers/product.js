@@ -1,3 +1,4 @@
+require('express-async-errors');
 const ProductController = require('../controllers/productController');
 const multer = require('multer');
 const crypto = require('crypto');
@@ -20,10 +21,10 @@ module.exports = (app) => {
   app.route('/products')
     .get(async (req, res, next) => {
       try {
-        let products = await product.all();
+        let products = await product.al();
         res.status(200).json({ data: products, message: 'Products successfully returned' });
       } catch (e) {
-        res.status(500).json({ message: e.message });
+        throw e;
       }
     })
     .post(async (req, res) => {
@@ -31,7 +32,7 @@ module.exports = (app) => {
         let prod = await product.create(req.body);
         res.status(201).json({ data: prod, message: 'Product successfully created' });
       } catch (e) {
-        res.status(412).json({ errors: e, message: 'Errors in create Product' });
+        throw e;
       }
     });
 
@@ -41,7 +42,7 @@ module.exports = (app) => {
         let prod = await product.find(req.params);
         res.status(200).json({ data: prod, message: 'Product successfully returned' });
       } catch (e) {
-        res.status(404).json({ data: e, message: 'Product not found' });
+        throw e;
       }
     })
     .put(async (req, res) => {
@@ -50,7 +51,7 @@ module.exports = (app) => {
         if (prod[0] === 1) res.status(200).json({ message: `Product ${req.params.id} successfully updated` });
         else res.status(412).json({ message: `Product ${req.params.id} not found` });
       } catch (e) {
-        res.status(412).json({ errors: e, message: 'Errors in updated Product' });
+        throw e;
       }
     })
     .delete(async (req, res) => {
@@ -59,7 +60,7 @@ module.exports = (app) => {
         if (prod === 1) res.status(200).json({ message: `Product ${req.params.id} successfully destroyed` });
         else res.status(412).json({ message: `Product ${req.params.id} not found` });
       } catch (e) {
-        res.status(412).json({ errors: e, message: 'Errors in destroyed Product' });
+        throw e;
       }
     });
 
@@ -69,7 +70,7 @@ module.exports = (app) => {
         await product.insertImages(req);
         res.status(200).json({ message: `Images of product ${req.params.id} successfully created` });
       } catch (e) {
-        res.status(500).josn({ message: e });
+        throw e;
       }
     });
 }

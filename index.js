@@ -13,8 +13,8 @@ const app = require('express')();
  */
 load()
   .include('./configs/db.js')
-  .then('./configs/middlewares.js')
   .then('api/routers')
+  .then('./configs/middlewares.js')
   .into(app)
 
 // start server
