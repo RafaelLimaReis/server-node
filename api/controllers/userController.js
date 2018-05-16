@@ -9,21 +9,15 @@ module.exports = (app) => {
           .catch(error => reject(error));
       });
     },
-    updateOrCreate: (data) => {
-      data.password = '1012313131';
-      data.cpf = 123456;
-      data.image = 'asdasdasd.jpg';
-      data.name = data.first_name;
-      data.lastName = data.last_name;
-      delete data.id;
-      User.findOne({ where: { id: data.id } }).then((item) => {
-        if (!item) {
-          User.create(data).then(res => res);
-        } else {
-          User.update(data, { where: { id: data.id } }).then(res => res);
-        }
-      })
 
+    updateOrCreate: async (data) => {
+      let user = await User.findOne({ where: { id_login: data.id_login } });
+      if (!user) {
+        user = await User.create(data);
+      } else {
+        user = await User.update(data, { where: { id_login: data.id_login } });
+      }
+      return user;
     }
   }
 }
