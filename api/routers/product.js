@@ -24,7 +24,7 @@ module.exports = (app) => {
         let products = await product.all();
         res.status(200).json({ data: products, message: 'Products successfully returned' });
       } catch (e) {
-        throw e;
+        throw e.message;
       }
     })
     .post(async (req, res) => {

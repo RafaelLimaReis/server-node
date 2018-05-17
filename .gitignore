@@ -3,7 +3,7 @@
 node_modules
 .vscode
 public
-/storage/images/*
+/storage/**/*
 
 # ARQUIVOS PROTEGIDOS
 .env
