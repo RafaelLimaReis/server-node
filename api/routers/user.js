@@ -47,11 +47,11 @@ module.exports = (app) => {
     dataUser.id_login = data.id ? data.id : false;
     dataUser.image = crypto.randomBytes(20).toString('hex') + '.jpg';
     dataUser.token = crypto.randomBytes(20).toString('hex');
-    try {
+    /* try {
       await copyImage(data, dataUser.image);
     } catch (e) {
       throw e;
-    }
+    }  */
     return dataUser;
   };
 
