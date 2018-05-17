@@ -10,19 +10,24 @@ module.exports = (sequelize, dataType) => {
       allowNull: false
     },
     lastName: {
+      type: dataType.STRING(30)
+    },
+    email: {
       type: dataType.STRING(30),
       allowNull: false
     },
-    password: {
-      type: dataType.STRING(30),
+    loginType: {
+      type: dataType.ENUM('FACE', 'GMAIL', 'LOCAL'),
       allowNull: false
+    },
+    id_login: {
+      type: dataType.BIGINT
+    },
+    password: {
+      type: dataType.STRING(30)
     },
     image: {
       type: dataType.STRING,
-      allowNull: false
-    },
-    cpf: {
-      type: dataType.INTEGER,
       allowNull: false
     },
     token: {

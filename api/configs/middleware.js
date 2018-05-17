@@ -1,10 +1,9 @@
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const timeout = require('express-timeout-handler');
-const express = require('express');
 
 const options = {
-  timeout: 3000,
+  timeout: 9000,
   onTimeout: (req, res) => {
     res.status(503).json({ message: 'Service unavailable.' });
   }
@@ -17,10 +16,4 @@ module.exports = (app) => {
   }));
   app.use(bodyParser.json());
   app.use(timeout.handler(options));
-  app.use((req, res, next) => {
-    next();
-  });
-  app.use(express.static('public'));
-
-  return app;
 }

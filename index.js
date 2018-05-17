@@ -13,8 +13,9 @@ const app = require('express')();
  */
 load()
   .include('./configs/db.js')
-  .then('./configs/middlewares.js')
-  .then('api/routers')
+  .then('./api/configs/middleware.js')
+  .then('./api/routers')
+  .then('./api/configs/errors.js')
   .into(app)
 
 // start server
