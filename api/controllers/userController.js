@@ -42,6 +42,19 @@ class userController {
   }
 
   /**
+   * Função de atualização de usuario
+   */
+  async update (data) {
+    try {
+      let user = await this.user.findOne({ where: { email: data.email } });
+      user = await this.user.update(data, { where: { id: user.id } });
+      return user;
+    } catch (e) {
+      throw e;
+    }
+  }
+ 
+  /**
    * Função para criar um novo usuario
    */
   async create (data) {
@@ -82,6 +95,18 @@ class userController {
       }});
       if (user) user = this.user.prototype.auth(data.password, user);
       return user;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  /**
+   * Função para apagar usuario
+   */
+  async destroy (id) {
+    try {
+      let number = this.user.destroy({ where: id });
+      return number;
     } catch (e) {
       throw e;
     }

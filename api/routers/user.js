@@ -29,6 +29,33 @@ module.exports = (app) => {
       } catch (e) {
         throw e;
       }
+    })
+    .put(upload.single('image'), async (req, res) => {
+      try {
+        let data = await organizeUser(req.body, req.file ? req.file.filename : null);
+        try {
+          let response = await user.update(data);
+          if (response[0] === 1) {
+            res.status(200).json({ message: 'User update successfully' });
+          } else {
+            res.status(400).json({ message: 'Error in update user' });
+          }
+        } catch (e) {
+          throw e;
+        }
+      } catch (e) {
+        throw e;
+      }
+    })
+  app.route('/users/:id')
+    .delete(async (req, res) => {
+      try {
+        let response = await user.destroy(req.params);
+        if (response === 1) res.status(200).json({ message: `User ${req.params.id} successfully destroyed` });
+        else res.status(412).json({ message: `User ${req.params.id} not found` });
+      } catch (e) {
+        throw e;
+      }
     });
 
   app.route('/users/login/facebook/')
@@ -89,8 +116,8 @@ const organizeUser = async (data, image = null, token, type = 'LOCAL') => {
   dataUser.lastName = data.last_name;
   dataUser.email = data.email;
   dataUser.loginType = type;
-  dataUser.id_login = data.id ? data.id : false;
-  dataUser.password = data.password ? data.password : false;
+  dataUser.id_login = data.id ? data.id : null;
+  dataUser.password = data.password ? data.password : null;
   dataUser.image = image != null ? image : crypto.randomBytes(20).toString('hex') + '.jpg';
   dataUser.token = crypto.randomBytes(20).toString('hex');
   /* try {
