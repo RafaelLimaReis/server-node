@@ -21,13 +21,13 @@ class productController {
    */
   async all () {
     try {
-      const user = await this.product.findAll({
+      const prod = await this.product.findAll({
         include: {
           model: this.image,
           as: 'images'
         }
       });
-      return user;
+      return prod;
     } catch (e) {
       throw e;
     }
