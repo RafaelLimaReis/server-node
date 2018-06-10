@@ -1,3 +1,5 @@
+const bycrypt = require('bcrypt');
+
 module.exports = (sequelize, dataType) => {
   const User = sequelize.define('tb_user', {
     id: {
@@ -24,13 +26,9 @@ module.exports = (sequelize, dataType) => {
       type: dataType.BIGINT
     },
     password: {
-      type: dataType.STRING(30)
+      type: dataType.STRING
     },
     image: {
-      type: dataType.STRING,
-      allowNull: false
-    },
-    token: {
       type: dataType.STRING,
       allowNull: false
     }
@@ -38,8 +36,20 @@ module.exports = (sequelize, dataType) => {
   {
     timestamp: true,
     paranoid: true
-  }
-  );
+  });
+
+  User.beforeCreate((user) => {
+    const pass = bycrypt.genSaltSync();
+    user.password = bycrypt.hashSync(user.password, pass);
+  });
+
+  User.prototype.auth = (value, user) => {
+    if (bycrypt.compareSync(value, user.password)) {
+      return user;
+    } else {
+      return false;
+    }
+  };
 
   User.associate = (models) => {
     User.hasMany(models.tb_product, { foreignKey: 'id_user' });
