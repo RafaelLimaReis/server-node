@@ -1,4 +1,5 @@
 require('express-async-errors');
+const auth = require('../configs/auth')();
 const ProductController = require('../controllers/productController');
 const upload = require('../configs/storage').product();
 
@@ -6,7 +7,7 @@ module.exports = (app) => {
   let product = new ProductController(app);
 
   app.route('/products')
-    .get(async (req, res, next) => {
+    .get(auth.authenticate(), async (req, res, next) => {
       try {
         let products = await product.all();
         res.status(200).json({ data: products, message: 'Products successfully returned' });
@@ -14,7 +15,7 @@ module.exports = (app) => {
         throw e.message;
       }
     })
-    .post(async (req, res) => {
+    .post(auth.authenticate(), async (req, res) => {
       try {
         let prod = await product.create(req.body);
         res.status(201).json({ data: prod, message: 'Product successfully created' });
@@ -24,7 +25,7 @@ module.exports = (app) => {
     });
 
   app.route('/products/:id')
-    .get(async (req, res) => {
+    .get(auth.authenticate(), async (req, res) => {
       try {
         let prod = await product.find(req.params);
         res.status(200).json({ data: prod, message: 'Product successfully returned' });
@@ -32,7 +33,7 @@ module.exports = (app) => {
         throw e;
       }
     })
-    .put(async (req, res) => {
+    .put(auth.authenticate(), async (req, res) => {
       try {
         let prod = await product.updated(req);
         if (prod[0] === 1) res.status(200).json({ message: `Product ${req.params.id} successfully updated` });
@@ -41,7 +42,7 @@ module.exports = (app) => {
         throw e;
       }
     })
-    .delete(async (req, res) => {
+    .delete(auth.authenticate(), async (req, res) => {
       try {
         let prod = await product.destroy(req.params);
         if (prod === 1) res.status(200).json({ message: `Product ${req.params.id} successfully destroyed` });
@@ -52,7 +53,7 @@ module.exports = (app) => {
     });
 
   app.route('/products/images/:id')
-    .post(upload.array('images', 5), async (req, res) => {
+    .post(auth.authenticate(), upload.array('images', 5), async (req, res) => {
       try {
         await product.insertImages(req);
         res.status(200).json({ message: `Images of product ${req.params.id} successfully created` });

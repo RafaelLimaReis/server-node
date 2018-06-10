@@ -53,7 +53,7 @@ class userController {
       throw e;
     }
   }
- 
+
   /**
    * Função para criar um novo usuario
    */

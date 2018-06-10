@@ -31,10 +31,6 @@ module.exports = (sequelize, dataType) => {
     image: {
       type: dataType.STRING,
       allowNull: false
-    },
-    token: {
-      type: dataType.STRING,
-      allowNull: false
     }
   },
   {
