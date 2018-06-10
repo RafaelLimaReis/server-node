@@ -1,6 +1,8 @@
 const path = require('path');
 require('express-async-errors');
 const graph = require('fbgraph');
+const auth = require('../configs/auth')();
+const jwt = require('jwt-simple');
 const crypto = require('crypto');
 const download = require('image-downloader');
 const UserController = require('../controllers/userController');
@@ -10,7 +12,7 @@ module.exports = (app) => {
   const user = new UserController(app);
 
   app.route('/users')
-    .get(async (req, res) => {
+    .get(auth.authenticate(), async (req, res) => {
       try {
         const response = await user.all();
         res.status(200).json({ data: response, message: 'users successfully returned' });
@@ -56,6 +58,9 @@ module.exports = (app) => {
             let data = await organizeUser(resFacebook, null, token, 'FACE');
             try {
               let response = await user.updateOrCreate(data);
+              const payload = { id: response.id, email: response.email };
+              const token = jwt.encode(payload, process.env.jwtSecret);
+              response['token'] = token;
               res.status(200).json({ data: response, message: 'User logged successfully' });
             } catch (e) {
               throw e;
@@ -90,24 +95,29 @@ module.exports = (app) => {
     .post(async (req, res) => {
       try {
         let data = await user.login(req.body);
-        if (data) res.status(200).json({ data: data, message: 'User return successfully' });
-        else res.status(401).json({ data: data, message: 'Email or/and password incorrect' });
+        if (data) {
+          const payload = { id: data.id, email: data.email };
+          const token = jwt.encode(payload, process.env.jwtSecret);
+          data['token'] = token;
+          let _data = await organizeUser(data, data.imagem);
+          res.status(200).json({ data: _data, message: 'User return successfully' });
+        } else res.status(401).json({ data: data, message: 'Email or/and password incorrect' });
       } catch (e) {
         throw e;
       }
     })
 }
 
-const organizeUser = async (data, image = null, token, type = 'LOCAL') => {
+const organizeUser = async (data, image = null, token = null, type = 'LOCAL') => {
   let dataUser = {};
-  dataUser.name = data.first_name;
-  dataUser.lastName = data.last_name;
+  dataUser.name = data.first_name ? data.first_name : data.name;
+  dataUser.lastName = data.last_name ? data.last_name : data.lastName;
   dataUser.email = data.email;
   dataUser.loginType = type;
   dataUser.id_login = data.id ? data.id : null;
-  dataUser.password = data.password ? data.password : null;
+  dataUser.password = data.password ? data.password : 'T0k5n';
   dataUser.image = image != null ? image : crypto.randomBytes(20).toString('hex') + '.jpg';
-  dataUser.token = crypto.randomBytes(20).toString('hex');
+  dataUser.token = data.token ? data.token : crypto.randomBytes(20).toString('hex');
   /* try {
     await copyImage(data, dataUser.image);
   } catch (e) {
