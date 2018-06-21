@@ -27,8 +27,10 @@ const server = app.listen(port, () => {
 
 // dependencias socket
 const io = require('socket.io').listen(server);
+/*io.app = app;
 
 // carregando modulos
 load()
   .include('socket')
   .into(io)
+*/

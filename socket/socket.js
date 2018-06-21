@@ -1,4 +1,7 @@
+const MessageController = require('../api/controllers/messageController');
+
 module.exports = (io) => {
+  const message = new MessageController(io.app);
   io.on('connection', (socket) => {
     socket.on('join-room', (room) => {
       socket.data.room = room;
