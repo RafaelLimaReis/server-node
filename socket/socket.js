@@ -1,11 +1,14 @@
 const MessageController = require('../api/controllers/messageController');
 
 module.exports = (io) => {
-  const message = new MessageController(io.app);
+  const chat = new MessageController(io.app);
+
   io.on('connection', (socket) => {
-    socket.on('join-room', (room) => {
-      socket.data.room = room;
-      socket.join(room);
+    socket.on('join-room', (connection) => {
+      socket.connection = connection;
+      chat.createRoom(connection)
+      console.log(connection);
+      socket.join(connection.room);
     });
 
     socket.on('add', (data) => {
@@ -18,6 +21,7 @@ module.exports = (io) => {
     });
 
     socket.on('set-name', (name) => {
+      console.log('teste');
       socket.data.user = name;
     });
   });
