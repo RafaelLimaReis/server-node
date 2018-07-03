@@ -4,10 +4,10 @@ const crypto = require('crypto');
 const profile = () => {
   const _storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, './storage/users/');
+      cb(null, './public/storage/users/');
     },
     filename: (req, file, cb) => {
-      let name = crypto.createHash('md5').update(file.originalname).digest('hex');
+      let name = crypto.randomBytes(20).toString('hex');
       name += '.' + file.mimetype.slice(6);
       cb(null, name);
     }
@@ -16,13 +16,14 @@ const profile = () => {
   const upload = multer({ storage: _storage });
   return upload;
 };
+
 const product = () => {
   const _storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, './storage/images/');
+      cb(null, './public/storage/images/');
     },
     filename: (req, file, cb) => {
-      let name = crypto.createHash('md5').update(file.originalname).digest('hex');
+      let name = crypto.randomBytes(20).toString('hex');
       name += '.' + file.mimetype.slice(6);
       cb(null, name);
     }

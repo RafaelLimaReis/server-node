@@ -1,6 +1,6 @@
-'use strict';
-
-const ServiceImages = require('../services/ServiceImages');
+const ProductService = require('../services/ProductService');
+const ImageService = require('../services/ImageService');
+const responseHelpers = require('../helpers/responseHelpers');
 
 /**
  * Class de produtos
@@ -10,24 +10,18 @@ class productController {
    * Construct class
    * @param {*} app
    */
-  constructor (app) {
-    this.serviceImages = new ServiceImages();
-    this.product = app.configs.db.models.tb_product;
-    this.image = app.configs.db.models.tb_image;
+  constructor (models) {
+    this.ImageService = new ImageService(models.tb_image);
+    this.ProductService = new ProductService(models.tb_product, models.tb_image);
   }
 
   /**
    * Função de retorno de todas os produtos
    */
-  async all () {
+  async all (user) {
     try {
-      const prod = await this.product.findAll({
-        include: {
-          model: this.image,
-          as: 'images'
-        }
-      });
-      return prod;
+      const response = await this.ProductService.findAll(user);
+      return responseHelpers.success(response, 'Products successfully returned');
     } catch (e) {
       throw e;
     }
@@ -37,9 +31,11 @@ class productController {
    * Função para criar um produto
    * @param {array} product
    */
-  async create (product) {
+  async create (product, files, user) {
     try {
-      await this.product.create(product)
+      let response = await this.ProductService.create(product, user);
+      await this._insertImages(files, response.id);
+      return responseHelpers.success(response, 'Products successfully created', 201);
     } catch (e) {
       throw e;
     }
@@ -49,16 +45,10 @@ class productController {
    * Buscar um produto
    * @param {int} id
    */
-  async find (id) {
+  async find (id, user) {
     try {
-      let prod = await this.product.findOne({
-        where: id,
-        include: {
-          model: this.image,
-          as: 'images'
-        }
-      });
-      return prod;
+      const response = await this.ProductService.find(id, user);
+      return responseHelpers.success(response, 'Product successfully returned');
     } catch (e) {
       throw e;
     }
@@ -68,10 +58,12 @@ class productController {
    * Atualizar produto
    * @param {array} data
    */
-  async updated (data) {
+  async update (data) {
     try {
-      let number = await this.product.update(data.body, { where: data.params });
-      return number;
+      let response = await this.ProductService.update(data);
+
+      if (response) return responseHelpers.success(response, 'Product successfully updated');
+      else return responseHelpers.notFound('Product not Found');
     } catch (e) {
       throw e;
     }
@@ -81,10 +73,12 @@ class productController {
    * Deletar um produto
    * @param {int} id
    */
-  async destroy (id) {
+  async destroy (id, user) {
     try {
-      let number = this.product.destroy({ where: id });
-      return number;
+      let response = await this.ProductService.destroy(id, user);
+
+      if (response) return responseHelpers.success([], 'Product successfully destroyed');
+      else return responseHelpers.notFound('Product not found');
     } catch (e) {
       throw e;
     }
@@ -94,18 +88,9 @@ class productController {
    * Inserir imagens do produto
    * @param {array} data
    */
-  async insertImages (data) {
-    let id = data.params.id;
-    let images = data.files;
-    let _data = await this.serviceImages.insertImages(images, id);
-    _data.map(async data => {
-      try {
-        await this.image.create(data);
-      } catch (e) {
-        throw e;
-      }
-    });
-    return data;
+  async _insertImages (files, id) {
+    let _data = await this.ImageService.insertImages(files, id);
+    return _data;
   }
 }
 

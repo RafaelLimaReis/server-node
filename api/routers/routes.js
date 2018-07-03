@@ -8,8 +8,8 @@ module.exports = (app) => {
    *  HTTP/1.1 200 OK
    *  {"message": "Olá bem vindo a API do troca de usados"}
    */
-  app.get('/', (req, res) => {
-    res.status(200).json({message: 'Olá, bem vindo a API do troca de usados'});
+  app.get('/', (req, res, next) => {
+    next('Olá, bem vindo a API do troca de usados');
   });
 }
 

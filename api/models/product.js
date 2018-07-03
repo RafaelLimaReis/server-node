@@ -7,7 +7,11 @@ module.exports = (sequelize, dataType) => {
     },
     nome: {
       type: dataType.STRING(30),
-      allowNull: false
+      validate: {
+        notEmpty: {
+          msg: 'Campo obrigatório'
+        }
+      }
     },
     id_user: {
       type: dataType.INTEGER,
@@ -22,7 +26,7 @@ module.exports = (sequelize, dataType) => {
 
   Product.associate = (models) => {
     models.tb_product.belongsTo(models.tb_user, {as: 'tb_product', foreignKey: 'id_user'});
-    models.tb_product.hasMany(models.tb_image, { foreignKey: 'id_product', as: 'images' });
+    models.tb_product.hasMany(models.tb_image, { foreignKey: 'id_product', as: 'images', onDelete: 'cascade' });
     models.tb_product.belongsToMany(models.tb_item_wish, { through: 'tb_wish', foreignKey: 'id_product' });
   };
 
