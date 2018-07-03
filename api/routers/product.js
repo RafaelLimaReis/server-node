@@ -33,9 +33,9 @@ module.exports = (app) => {
         throw e;
       }
     })
-    .put(auth.authenticate(), async (req, res, next) => {
+    .put(auth.authenticate(), upload.array('images', 5), async (req, res, next) => {
       try {
-        res.locals = await product.update(req);
+        res.locals = await product.update(req, req.files, req.user);
         next();
       } catch (e) {
         throw e;

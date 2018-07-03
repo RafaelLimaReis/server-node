@@ -52,8 +52,8 @@ class ProductService {
     }
   }
 
-  async update (data) {
-    let product = await this.find(data.params.id, data.user);
+  async update (data, user) {
+    let product = await this.find(data.params.id, user);
     try {
       if (product) {
         await this.product.update(

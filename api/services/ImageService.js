@@ -28,6 +28,10 @@ class ImageService {
       }
     });
   }
+
+  async deleteImages (id) {
+    await this.images.destroy({ where: { id_product: id } });
+  }
 }
 
 module.exports = ImageService;
