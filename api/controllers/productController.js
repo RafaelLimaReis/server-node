@@ -58,11 +58,12 @@ class productController {
    * Atualizar produto
    * @param {array} data
    */
-  async update (data) {
+  async update (product, files, user) {
     try {
-      let response = await this.ProductService.update(data);
-
-      if (response) return responseHelpers.success(response, 'Product successfully updated');
+      let newProduct = await this.ProductService.update(product, user);
+      if (files) await this.ImageService.deleteImages(newProduct.id);
+      await this._insertImages(files, newProduct.id);
+      if (newProduct) return responseHelpers.success(newProduct, 'Product successfully updated');
       else return responseHelpers.notFound('Product not Found');
     } catch (e) {
       throw e;
