@@ -1,5 +1,8 @@
 'use strict';
 
+const UserService = require('../services/UserService');
+const responseHelpers = require('../helpers/responseHelpers');
+
 /**
  * Class de usuarios
  */
@@ -8,8 +11,9 @@ class userController {
    * Construct class
    * @param {*} app
    */
-  constructor (app) {
-    this.user = app.configs.db.models.tb_user;
+  constructor (models) {
+    this.user = models.tb_user; // a tirar
+    this.userService = new UserService(models.tb_user);
   }
 
   /**
@@ -17,8 +21,8 @@ class userController {
    */
   async all () {
     try {
-      const user = await this.user.findAll({});
-      return user
+      const response = await this.userService.findAll();
+      return responseHelpers.success(response, 'users successfully returned');
     } catch (e) {
       throw e;
     }
@@ -27,15 +31,22 @@ class userController {
   /**
    * Função de atualização ou criação de usuario (facebook)
    */
-  async updateOrCreate (data) {
+  async createFacebook (data) {
     try {
-      let user = await this.user.findOne({ where: { id_login: data.id_login } });
-      if (!user) {
-        user = await this.user.create(data);
-      } else {
-        user = await this.user.update(data, { where: { id_login: data.id_login } });
-      }
-      return user;
+      const response = await this.userService.createFacebook(data);
+      return responseHelpers.success(response, 'User logged successfully');
+    } catch (e) {
+      throw e;
+    }
+  }
+  /**
+   * Função para criar um novo usuario
+   */
+  async create (data, files) {
+    try {
+      const response = await this.userService.create(data, files);
+      if (response) return responseHelpers.success(response, 'User create successfully');
+      else return responseHelpers.exists('User exists');
     } catch (e) {
       throw e;
     }
@@ -44,45 +55,14 @@ class userController {
   /**
    * Função de atualização de usuario
    */
-  async update (data) {
+  async update (data, files = null) {
     try {
-      let user = await this.user.findOne({ where: { email: data.email } });
-      user = await this.user.update(data, { where: { id: user.id } });
-      return user;
+      const response = await this.userService.update(data, files);
+      if (response) return responseHelpers.success(response, 'User updated successfully');
+      else return responseHelpers.notFound('User notfound');
     } catch (e) {
       throw e;
     }
-  }
-
-  /**
-   * Função para criar um novo usuario
-   */
-  async create (data) {
-    try {
-      var findOne = await this.user.findOne({
-        where: {
-          email: data.email
-        }})
-    } catch (e) {
-      throw e;
-    }
-    if (!findOne) {
-      try {
-        let user = await this.user.create({
-          name: data.name,
-          lastName: data.lastName,
-          email: data.email,
-          password: data.password,
-          image: data.image,
-          loginType: data.loginType,
-          token: data.token
-        });
-        return user;
-      } catch (e) {
-        throw e;
-      }
-    }
-    return null;
   }
 
   /**
@@ -90,11 +70,9 @@ class userController {
    */
   async login (data) {
     try {
-      let user = await this.user.findOne({where: {
-        email: data.email
-      }});
-      if (user) user = this.user.prototype.auth(data.password, user);
-      return user;
+      const response = await this.userService.login(data);
+      if (response) return responseHelpers.success(response, 'User logged successfully');
+      else return responseHelpers.notFound('Email or/and password incorrect');
     } catch (e) {
       throw e;
     }
@@ -103,10 +81,11 @@ class userController {
   /**
    * Função para apagar usuario
    */
-  async destroy (id) {
+  async destroy (user) {
     try {
-      let number = this.user.destroy({ where: id });
-      return number;
+      const response = await this.userService.destroy(user);
+      if (response) return responseHelpers.success([], 'User successfully destroyed');
+      else return responseHelpers.notFound('User not found');
     } catch (e) {
       throw e;
     }

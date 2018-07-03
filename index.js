@@ -3,7 +3,6 @@ require('dotenv-safe').config();
 
 // dependencias do servidor
 const load = require('consign');
-const logger = require('./configs/log');
 const app = require('express')();
 
 /**
@@ -15,14 +14,14 @@ load()
   .include('./configs/db.js')
   .then('./api/configs/middleware.js')
   .then('./api/routers')
-  .then('./api/configs/errors.js')
+  .then('./api/configs/info.js')
   .into(app)
 
 // start server
 const port = process.env.PORT || 8000;
 
 const server = app.listen(port, () => {
-  logger.info(`Server start in port ${process.env.PORT}`);
+  console.log(`Server start in port ${process.env.PORT}`);
 });
 
 // dependencias socket
