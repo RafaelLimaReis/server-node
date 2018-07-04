@@ -1,5 +1,5 @@
 module.exports = (sequelize, dataType) => {
-  const Image = sequelize.define('tb_images', {
+  const categoryDesired = sequelize.define('tb_categoryDesired', {
     id: {
       type: dataType.INTEGER,
       primaryKey: true,
@@ -9,8 +9,8 @@ module.exports = (sequelize, dataType) => {
       type: dataType.INTEGER,
       allowNull: false
     },
-    hash_name: {
-      type: dataType.STRING,
+    categoryDesired: {
+      type: dataType.STRING(30),
       allowNull: false
     }
   },
@@ -20,9 +20,9 @@ module.exports = (sequelize, dataType) => {
   }
   );
 
-  Image.associate = (models) => {
-    Image.belongsTo(models.tb_products, { as: 'images', foreignKey: 'id_product' });
-  };
+  categoryDesired.associate = (models) => {
+    categoryDesired.belongsTo(models.tb_products, { as: 'products', foreignKey: 'id_product' });
+  }
 
-  return Image;
+  return categoryDesired;
 }
