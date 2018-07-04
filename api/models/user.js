@@ -1,7 +1,7 @@
 const bycrypt = require('bcrypt');
 
 module.exports = (sequelize, dataType) => {
-  const User = sequelize.define('tb_user', {
+  const User = sequelize.define('tb_users', {
     id: {
       type: dataType.INTEGER,
       primaryKey: true,
@@ -11,13 +11,16 @@ module.exports = (sequelize, dataType) => {
       type: dataType.STRING(30),
       allowNull: false
     },
-    name: {
+    firstName: {
       type: dataType.STRING(30),
       allowNull: false
     },
     lastName: {
       type: dataType.STRING(30)
     },
+    /* id_address: {
+      type: dataType.INTEGER
+    }, */
     email: {
       type: dataType.STRING(30),
       allowNull: false
@@ -56,7 +59,13 @@ module.exports = (sequelize, dataType) => {
   };
 
   User.associate = (models) => {
-    User.hasMany(models.tb_product, { foreignKey: 'id_user' });
+    User.hasMany(models.tb_products, { foreignKey: 'id_user' });
+    // User.belongsTo(models.tb_addresses, { as: 'address', foreignKey: 'id_address' });
+    User.hasMany(models.tb_chats, { foreignKey: 'id_firstUser' });
+    User.hasMany(models.tb_chats, { foreignKey: 'id_lastUser' });
+    User.hasMany(models.tb_offers, { foreignKey: 'id_firstUser' });
+    User.hasMany(models.tb_offers, { foreignKey: 'id_lastUser' });
+    User.belongsToMany(models.tb_products, { as: 'user', through: 'tb_wishes', foreignKey: 'id_user' });
   };
 
   return User;

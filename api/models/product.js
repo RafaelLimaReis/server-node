@@ -1,11 +1,11 @@
 module.exports = (sequelize, dataType) => {
-  const Product = sequelize.define('tb_product', {
+  const Product = sequelize.define('tb_products', {
     id: {
       type: dataType.INTEGER,
       primaryKey: true,
       autoIncrement: true
     },
-    nome: {
+    name: {
       type: dataType.STRING(30),
       validate: {
         notEmpty: {
@@ -25,9 +25,11 @@ module.exports = (sequelize, dataType) => {
   );
 
   Product.associate = (models) => {
-    models.tb_product.belongsTo(models.tb_user, {as: 'tb_product', foreignKey: 'id_user'});
-    models.tb_product.hasMany(models.tb_image, { foreignKey: 'id_product', as: 'images', onDelete: 'cascade' });
-    models.tb_product.belongsToMany(models.tb_item_wish, { through: 'tb_wish', foreignKey: 'id_product' });
+    Product.belongsTo(models.tb_users, {foreignKey: 'id_user'});
+    Product.hasMany(models.tb_images, { as: 'images', foreignKey: 'id_product', onDelete: 'cascade' });
+    Product.hasMany(models.tb_offeredProducts, { as: 'product', foreignKey: 'id_product' });
+    Product.hasMany(models.tb_categoryDesired, { as: 'categorys', foreignKey: 'id_product', onDelete: 'cascade' });
+    Product.belongsToMany(models.tb_users, { as: 'productWished', through: 'tb_wishes', foreignKey: 'id_product' });
   };
 
   return Product;

@@ -11,8 +11,8 @@ class productController {
    * @param {*} app
    */
   constructor (models) {
-    this.ImageService = new ImageService(models.tb_image);
-    this.ProductService = new ProductService(models.tb_product, models.tb_image);
+    this.ImageService = new ImageService(models.tb_images);
+    this.ProductService = new ProductService(models.tb_products, models.tb_images);
   }
 
   /**

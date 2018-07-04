@@ -1,12 +1,16 @@
 module.exports = (sequelize, dataType) => {
-  const itemDesejo = sequelize.define('tb_item_wish', {
+  const itemWish = sequelize.define('tb_wishes', {
     id: {
       type: dataType.INTEGER,
       primaryKey: true,
       autoIncrement: true
     },
-    name: {
-      type: dataType.STRING,
+    id_product: {
+      type: dataType.INTEGER,
+      allowNull: false
+    },
+    id_user: {
+      type: dataType.INTEGER,
       allowNull: false
     }
   },
@@ -16,9 +20,5 @@ module.exports = (sequelize, dataType) => {
   }
   );
 
-  itemDesejo.associate = (models) => {
-    itemDesejo.belongsToMany(models.tb_product, { as: 'tb_item_wish', through: 'tb_wish', foreignKey: 'id_item_wanted' });
-  };
-
-  return itemDesejo;
+  return itemWish;
 }

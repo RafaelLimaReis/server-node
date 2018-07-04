@@ -6,11 +6,11 @@ const jwt = require('jwt-simple');
 const createObjectUser = (data, oldUser = null) => {
   let dataUser = {};
   if (data) {
-    dataUser.name = 'first_name' in data ? data.first_name : oldUser.name;
+    dataUser.firstName = 'first_name' in data ? data.first_name : oldUser.firstName;
     dataUser.lastName = 'last_name' in data ? data.last_name : oldUser.lastName;
     dataUser.email = 'email' in data ? data.email : oldUser.email;
   } else {
-    dataUser.name = oldUser.name;
+    dataUser.firstName = oldUser.firstName;
     dataUser.lastName = oldUser.lastName;
     dataUser.email = oldUser.email;
   }
