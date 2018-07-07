@@ -21,10 +21,16 @@ const createObjectUser = (data, oldUser = null) => {
 const createObjectLocal = (data, image, oldUser = null) => {
   let dataUser = createObjectUser(data, oldUser);
 
-  dataUser.userName = 'userName' in data ? data.userName : oldUser.userName;
+  if (data) {
+    dataUser.userName = 'userName' in data ? data.userName : oldUser.userName;
+    dataUser.password = 'password' in data ? data.password : oldUser.password;
+  } else {
+    dataUser.userName = oldUser.userName;
+    dataUser.password = oldUser.password;
+    dataUser.id = oldUser.id;
+  }
   dataUser.loginType = 'LOCAL';
   dataUser.id_login = null;
-  dataUser.password = 'password' in data ? data.password : oldUser.password;
   dataUser.image = image ? image.filename : oldUser.image;
 
   return dataUser;

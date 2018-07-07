@@ -65,7 +65,7 @@ module.exports = (sequelize, dataType) => {
     User.hasMany(models.tb_chats, { foreignKey: 'id_lastUser' });
     User.hasMany(models.tb_offers, { foreignKey: 'id_firstUser' });
     User.hasMany(models.tb_offers, { foreignKey: 'id_lastUser' });
-    User.belongsToMany(models.tb_products, { as: 'user', through: 'tb_wishes', foreignKey: 'id_user' });
+    User.belongsToMany(models.tb_products, { as: 'itemsWished', through: 'tb_wishes', foreignKey: 'id_user' });
   };
 
   return User;
