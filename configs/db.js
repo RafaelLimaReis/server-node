@@ -45,7 +45,7 @@ module.exports = (app) => {
 
     database.models = importModels(sequelize);
 
-    sequelize.sync({ force: true }).done(() => {
+    sequelize.sync().done(() => {
       return database;
     });
   };

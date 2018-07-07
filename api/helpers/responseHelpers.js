@@ -28,4 +28,13 @@ const exists = (message) => {
   return response;
 }
 
-module.exports = { success, notFound, exists };
+const error = (message) => {
+  const response = {
+    status: 500,
+    message: message
+  }
+
+  return response;
+}
+
+module.exports = { success, notFound, exists, error };
