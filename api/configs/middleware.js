@@ -18,6 +18,8 @@ module.exports = (app) => {
   }));
   app.use(auth.initialize());
   app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded());
+  app.use(bodyParser.urlencoded({ extended: true }));
   app.use(timeout.handler(options));
   app.use(express.static('public'));
 }
