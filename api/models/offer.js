@@ -19,7 +19,8 @@ module.exports = (sequelize, dataType) => {
       defaultValue: 0
     },
     status: {
-      type: dataType.STRING(7),
+      type: dataType.ENUM('APROVADO', 'RECUSADO', 'AGUARDANDO'),
+      defaultValue: 'AGUARDANDO',
       allowNull: false
     }
   },
