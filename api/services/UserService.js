@@ -63,7 +63,7 @@ class UserService {
   async login (data) {
     try {
       let user = await this.user.findOne({where: {
-        email: data.email
+        userName: data.userName
       }});
       if (user) {
         let userLogged = this.user.prototype.auth(data.password, user);

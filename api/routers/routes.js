@@ -9,7 +9,12 @@ module.exports = (app) => {
    *  {"message": "Olá bem vindo a API do troca de usados"}
    */
   app.get('/', (req, res, next) => {
-    next('Olá, bem vindo a API do troca de usados');
+    res.locals = {
+      data: [],
+      message: 'Olá, bem vindo a API do troca de usados',
+      status: 200
+    };
+    next();
   });
 }
 

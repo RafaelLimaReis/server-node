@@ -1,19 +1,25 @@
 'use strict';
+const Op = require('sequelize').Op;
 
 class ProductService {
-  constructor (product, image) {
-    this.product = product;
-    this.image = image;
+  constructor (models) {
+    this.product = models.tb_products;
+    this.image = models.tb_images;
+    this.user = models.tb_users;
   }
 
   async findAll (user) {
     try {
       const prod = await this.product.findAll({
-        where: {id_user: user.id},
-        include: {
+        where: {id_user: {
+          [Op.ne]: user.id
+        }},
+        include: [{
           model: this.image,
           as: 'images'
-        }
+        }, {
+          model: this.user
+        }]
       });
 
       return prod;
