@@ -13,7 +13,7 @@ class userController {
    */
   constructor (models) {
     this.user = models.tb_user; // a tirar
-    this.userService = new UserService(models.tb_users);
+    this.userService = new UserService(models.tb_users, models.tb_adresses);
   }
 
   /**

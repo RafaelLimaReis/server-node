@@ -2,7 +2,7 @@ const organizeResponse = (user, object) => {
   let chats = [];
   object.forEach((element, i) => {
     let value = {};
-    if (user === element.chat_first.id) {
+    if (user.id === element.chat_first.id) {
       value.user = {
         id: element.chat_first.id,
         name: element.chat_first.userName,
@@ -26,6 +26,8 @@ const organizeResponse = (user, object) => {
       }
     }
     value.messages = element.messages;
+    value.room = element.roomName;
+    value.idRoom = element.id;
     chats.push(value);
   });
 

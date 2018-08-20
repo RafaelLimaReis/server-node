@@ -13,6 +13,9 @@ module.exports = (sequelize, dataType) => {
         }
       }
     },
+    description: {
+      type: dataType.TEXT
+    },
     id_user: {
       type: dataType.INTEGER,
       allowNull: false
@@ -27,6 +30,7 @@ module.exports = (sequelize, dataType) => {
   Product.associate = (models) => {
     Product.belongsTo(models.tb_users, {foreignKey: 'id_user'});
     Product.hasMany(models.tb_images, { as: 'images', foreignKey: 'id_product', onDelete: 'cascade' });
+    Product.hasMany(models.tb_wishes, { as: 'wish', foreignKey: 'id_product' });
     Product.hasMany(models.tb_offeredProducts, { as: 'product', foreignKey: 'id_product' });
     Product.hasMany(models.tb_categoryDesired, { as: 'categorys', foreignKey: 'id_product', onDelete: 'cascade' });
     Product.belongsToMany(models.tb_users, { as: 'productWished', through: 'tb_wishes', foreignKey: 'id_product' });

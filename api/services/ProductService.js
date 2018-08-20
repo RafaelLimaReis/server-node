@@ -4,6 +4,7 @@ const Op = require('sequelize').Op;
 class ProductService {
   constructor (models) {
     this.product = models.tb_products;
+    this.wish = models.tb_wishes;
     this.image = models.tb_images;
     this.user = models.tb_users;
   }
@@ -19,6 +20,15 @@ class ProductService {
           as: 'images'
         }, {
           model: this.user
+        },
+        {
+          model: this.user,
+          as: 'productWished',
+          through: {
+            where: {
+              id_user: user.id
+            }
+          }
         }]
       });
 

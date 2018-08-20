@@ -1,9 +1,13 @@
 module.exports = (sequelize, dataType) => {
-  const Address = sequelize.define('tb_addresses', {
+  const Address = sequelize.define('tb_adresses', {
     id: {
       type: dataType.INTEGER,
       primaryKey: true,
       autoIncrement: true
+    },
+    cep: {
+      type: dataType.INTEGER,
+      allowNull: false
     },
     street: {
       type: dataType.STRING(30),
@@ -20,6 +24,10 @@ module.exports = (sequelize, dataType) => {
     district: {
       type: dataType.STRING(30),
       allowNull: false
+    },
+    number: {
+      type: dataType.INTEGER,
+      allowNull: false
     }
   }, {
     timestap: true,
@@ -27,7 +35,7 @@ module.exports = (sequelize, dataType) => {
   });
 
   Address.associate = (models) => {
-    // Address.hasMany(models.tb_users, { as: 'users', foreignKey: 'id_address' })
+    Address.hasMany(models.tb_users, { as: 'users', foreignKey: 'id_address' })
   }
 
   return Address;
