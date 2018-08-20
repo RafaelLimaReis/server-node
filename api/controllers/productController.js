@@ -12,7 +12,7 @@ class productController {
    */
   constructor (models) {
     this.ImageService = new ImageService(models.tb_images);
-    this.ProductService = new ProductService(models.tb_products, models.tb_images);
+    this.ProductService = new ProductService(models);
   }
 
   /**

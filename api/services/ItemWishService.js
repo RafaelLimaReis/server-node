@@ -28,7 +28,7 @@ class ItemWishService {
     let id = parseInt(param);
     const response = await this.itemWish.destroy({ where: {
       id_user: user.id,
-      id: id
+      id_product: id
     }});
 
     return response;

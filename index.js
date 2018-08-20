@@ -23,10 +23,11 @@ const port = process.env.PORT || 8000;
 const server = app.listen(port, () => {
   console.log(`Server start in port ${process.env.PORT}`);
 });
-
+console.log(server);
 // dependencias socket
-const io = require('socket.io').listen(server);
+const io = require('socket.io')(server);
 
+io.app = app;
 // carregando modulos
 load()
   .include('socket')

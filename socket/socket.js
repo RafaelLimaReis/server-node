@@ -1,21 +1,32 @@
+const MessageController = require('../api/controllers/MessageController');
+
 module.exports = (io) => {
+  const chat = new MessageController(io.app.configs.db.models);
+
   io.on('connection', (socket) => {
-    socket.on('join-room', (room) => {
-      socket.data.room = room;
-      socket.join(room);
+    socket.on('join-room', (connection) => {
+      socket.connection = connection;
+      chat.createRoom(connection);
+      socket.join(connection.room);
+    });
+
+    socket.on('rejoin', (connection) => {
+      socket.connection = connection;
+      socket.join(connection.room);
     });
 
     socket.on('add', (data) => {
-      socket.to(socket.data.room).emmit('message',
-        {
-          message: data.message,
-          from: data.from,
-          date: new Date()
-        });
+      io.in(socket.connection.room).emit('message', {
+        message: data.message,
+        id_userSend: data.id_userSend,
+        date: new Date()
+      });
+
+      chat.saveMessage(data);
     });
 
-    socket.on('set-name', (name) => {
-      socket.data.user = name;
+    socket.on('disconnect', (room) => {
+      socket.leave(room);
     });
   });
 }

@@ -1,14 +1,15 @@
 const multer = require('multer');
 const crypto = require('crypto');
+const path = require('path');
 
 const profile = () => {
   const _storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, './public/storage/users/');
+      cb(null, path.join(__dirname, '../../public/storage/users/'));
     },
     filename: (req, file, cb) => {
-      let name = crypto.randomBytes(20).toString('hex');
-      name += '.' + file.mimetype.slice(6);
+      let name = crypto.randomBytes(20).toString('hex') + '.jpeg';
+      // name += '.' + file.mimetype.slice(6);
       cb(null, name);
     }
   });
@@ -20,11 +21,11 @@ const profile = () => {
 const product = () => {
   const _storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, './public/storage/images/');
+      cb(null, path.join(__dirname, '../../public/storage/images/'));
     },
     filename: (req, file, cb) => {
-      let name = crypto.randomBytes(20).toString('hex');
-      name += '.' + file.mimetype.slice(6);
+      let name = crypto.randomBytes(20).toString('hex') + '.jpeg';
+      // name += '.' + file.mimetype.slice(6);
       cb(null, name);
     }
   });

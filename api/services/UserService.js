@@ -1,11 +1,12 @@
 'use strict';
-
+const Op = require('sequelize').Op;
 const usersHelpers = require('../helpers/usersHelpers');
 const Facebook = require('facebookgraph');
 
 class UserService {
-  constructor (user) {
+  constructor (user, address) {
     this.user = user;
+    this.address = address;
   }
 
   async findAll () {
@@ -18,6 +19,9 @@ class UserService {
   }
 
   async create (data, files) {
+    if (data.address) {
+      data.id_address = await this.__createAddress(data.address);
+    }
     const objectUser = await usersHelpers.createObjectLocal(data, files);
     try {
       const findOne = await this.user.findOne({
@@ -63,7 +67,7 @@ class UserService {
   async login (data) {
     try {
       let user = await this.user.findOne({where: {
-        email: data.email
+        userName: data.userName
       }});
       if (user) {
         let userLogged = this.user.prototype.auth(data.password, user);
@@ -98,6 +102,25 @@ class UserService {
     let response = await this.user.destroy({ where: {id: user.id} });
     if (response === 1) return true;
     else return false;
+  }
+
+  async __createAddress (address) {
+    const findAddress = await this.address.findOne({
+      where: {
+        [Op.and]: [
+          {cep: address.cep},
+          {street: address.street},
+          {number: address.number}
+        ]
+      }
+    });
+
+    if (!findAddress) {
+      const newAddress = await this.address.create(address);
+      return newAddress.id;
+    }
+
+    return findAddress.id;
   }
 }
 

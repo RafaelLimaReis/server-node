@@ -18,9 +18,9 @@ module.exports = (sequelize, dataType) => {
     lastName: {
       type: dataType.STRING(30)
     },
-    /* id_address: {
+    id_address: {
       type: dataType.INTEGER
-    }, */
+    },
     email: {
       type: dataType.STRING(30),
       allowNull: false
@@ -60,7 +60,7 @@ module.exports = (sequelize, dataType) => {
 
   User.associate = (models) => {
     User.hasMany(models.tb_products, { foreignKey: 'id_user' });
-    // User.belongsTo(models.tb_addresses, { as: 'address', foreignKey: 'id_address' });
+    User.belongsTo(models.tb_adresses, { as: 'address', foreignKey: 'id_address' });
     User.hasMany(models.tb_chats, { foreignKey: 'id_firstUser' });
     User.hasMany(models.tb_chats, { foreignKey: 'id_lastUser' });
     User.hasMany(models.tb_offers, { foreignKey: 'id_firstUser' });
