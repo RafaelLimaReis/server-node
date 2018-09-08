@@ -37,7 +37,7 @@ class MessageService {
       }]
     });
 
-    return chatHelpers.organizeResponse(user, chats);
+    return chatHelpers.organizeResponse(auth, chats);
   }
 
   async findRoom (user, room) {

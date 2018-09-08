@@ -15,8 +15,7 @@ module.exports = (sequelize, dataType) => {
     }
   },
   {
-    timestamp: true,
-    paranoid: true
+    timestamp: true
   }
   );
 

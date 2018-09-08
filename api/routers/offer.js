@@ -1,11 +1,11 @@
-const auth = require('../configs/auth')();
+const auth = require('../configs/auth');
 const OfferController = require('../controllers/OfferController');
 
 module.exports = (app) => {
   let offerController = new OfferController(app.configs.db.models);
 
   app.route('/offer')
-    .get(auth.authenticate(), async (req, res, next) => {
+    .get(auth.authenticate, async (req, res, next) => {
       try {
         res.locals = await offerController.findAll(req.user);
         next();
@@ -13,7 +13,7 @@ module.exports = (app) => {
         throw e;
       }
     })
-    .post(auth.authenticate(), async (req, res, next) => {
+    .post(auth.authenticate, async (req, res, next) => {
       try {
         res.locals = await offerController.create(req.user, req.body);
         next();
@@ -22,7 +22,7 @@ module.exports = (app) => {
       }
     })
   app.route('/offer/:id')
-    .get(auth.authenticate(), async (req, res, next) => {
+    .get(auth.authenticate, async (req, res, next) => {
       try {
         res.locals = await offerController.findOffers(req.params.id)
         next();
@@ -30,7 +30,7 @@ module.exports = (app) => {
         throw e;
       }
     })
-    .put(auth.authenticate(), async (req, res, next) => {
+    .put(auth.authenticate, async (req, res, next) => {
       try {
         res.locals = await offerController.updateStatus(req.user, req.body, req.params.id);
         next();

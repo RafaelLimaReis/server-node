@@ -1,7 +1,7 @@
 const download = require('image-downloader');
 const crypto = require('crypto');
 const path = require('path');
-const jwt = require('jwt-simple');
+const jwt = require('jws');
 
 const createObjectUser = (data, oldUser = null) => {
   let dataUser = {};
@@ -58,7 +58,11 @@ const createObjectfacebook = async (data, oldUser = null) => {
 
 const generateToken = (user) => {
   const payload = { id: user.id, email: user.email };
-  const token = jwt.encode(payload, process.env.jwtSecret);
+  const token = jwt.sign({
+    header: {alg: 'HS256', typ: 'JWT'},
+    payload: payload,
+    secret: process.env.jwtSecret
+  });
 
   return token;
 }

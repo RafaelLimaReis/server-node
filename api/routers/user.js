@@ -1,5 +1,5 @@
 require('express-async-errors');
-const auth = require('../configs/auth')();
+const auth = require('../configs/auth');
 const UserController = require('../controllers/userController');
 const upload = require('../configs/storage').profile();
 
@@ -7,7 +7,7 @@ module.exports = (app) => {
   const user = new UserController(app.configs.db.models);
 
   app.route('/users')
-    .get(auth.authenticate(), async (req, res, next) => {
+    .get(auth.authenticate, async (req, res, next) => {
       try {
         res.locals = await user.all();
         next();
@@ -15,7 +15,7 @@ module.exports = (app) => {
         throw e;
       }
     })
-    .delete(auth.authenticate(), async (req, res, next) => {
+    .delete(auth.authenticate, async (req, res, next) => {
       try {
         res.locals = await user.destroy(req.user);
         next();
@@ -24,7 +24,7 @@ module.exports = (app) => {
       }
     })
   app.route('/users/:id')
-    .put(auth.authenticate(), upload.single('image'), async (req, res, next) => {
+    .put(auth.authenticate, upload.single('image'), async (req, res, next) => {
       try {
         res.locals = await user.update(req, req.file ? req.file : null);
         next();

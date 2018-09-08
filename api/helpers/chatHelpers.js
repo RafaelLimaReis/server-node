@@ -1,6 +1,6 @@
 const organizeResponse = (user, object) => {
   let chats = [];
-  object.forEach((element, i) => {
+  object.forEach((element) => {
     let value = {};
     if (user.id === element.chat_first.id) {
       value.user = {

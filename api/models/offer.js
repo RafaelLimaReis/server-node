@@ -30,6 +30,7 @@ module.exports = (sequelize, dataType) => {
   });
 
   Offer.associate = (models) => {
+    Offer.belongsTo(models.tb_offers, { as: 'start', foreignKey: 'id_offerStart', targetKey: 'id' });
     Offer.belongsTo(models.tb_users, { as: 'offer_first', foreignKey: 'id_firstUser' });
     Offer.belongsTo(models.tb_users, { as: 'offer_last', foreignKey: 'id_lastUser' });
     Offer.hasMany(models.tb_offeredProducts, { as: 'products', foreignKey: 'id_offer' });

@@ -1,7 +1,7 @@
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const timeout = require('express-timeout-handler');
-const auth = require('./auth')();
+
 const express = require('express');
 
 const options = {
@@ -12,11 +12,7 @@ const options = {
 };
 
 module.exports = (app) => {
-  app.use(cors({
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type']
-  }));
-  app.use(auth.initialize());
+  app.use(cors());
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded());
   app.use(bodyParser.urlencoded({ extended: true }));

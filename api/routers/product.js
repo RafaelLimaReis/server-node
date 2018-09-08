@@ -1,5 +1,5 @@
 require('express-async-errors');
-const auth = require('../configs/auth')();
+const auth = require('../configs/auth');
 const ProductController = require('../controllers/productController');
 const upload = require('../configs/storage').product();
 
@@ -7,7 +7,7 @@ module.exports = (app) => {
   let product = new ProductController(app.configs.db.models);
 
   app.route('/products')
-    .get(auth.authenticate(), async (req, res, next) => {
+    .get(auth.authenticate, async (req, res, next) => {
       try {
         res.locals = await product.all(req.user);
         next();
@@ -15,7 +15,7 @@ module.exports = (app) => {
         throw e.message;
       }
     })
-    .post(auth.authenticate(), upload.array('images', 5), async (req, res, next) => {
+    .post(auth.authenticate, upload.array('images', 5), async (req, res, next) => {
       try {
         res.locals = await product.create(req.body, req.files, req.user);
         next();
@@ -24,8 +24,26 @@ module.exports = (app) => {
       }
     });
 
+  app.route('/me/products')
+    .get(auth.authenticate, async (req, res, next) => {
+      try {
+        res.locals = await product.allMe(req.user);
+        next();
+      } catch (e) {
+        throw e.message;
+      }
+    })
+  app.route('/other/:id/products')
+    .get(auth.authenticate, async (req, res, next) => {
+      try {
+        res.locals = await product.allForOffer(req.params.id);
+        next();
+      } catch (e) {
+        throw e.message;
+      }
+    })
   app.route('/products/:id')
-    .get(auth.authenticate(), async (req, res, next) => {
+    .get(auth.authenticate, async (req, res, next) => {
       try {
         res.locals = await product.find(req.params.id, req.user);
         next();
@@ -33,7 +51,7 @@ module.exports = (app) => {
         throw e;
       }
     })
-    .put(auth.authenticate(), upload.array('images', 5), async (req, res, next) => {
+    .put(auth.authenticate, upload.array('images', 5), async (req, res, next) => {
       try {
         res.locals = await product.update(req, req.files, req.user);
         next();
@@ -41,7 +59,7 @@ module.exports = (app) => {
         throw e;
       }
     })
-    .delete(auth.authenticate(), async (req, res, next) => {
+    .delete(auth.authenticate, async (req, res, next) => {
       try {
         res.locals = await product.destroy(req.params.id, req.user);
         next();

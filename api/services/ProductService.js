@@ -38,6 +38,42 @@ class ProductService {
     }
   }
 
+  async findAllMe (user) {
+    try {
+      const prod = await this.product.findAll({
+        where: {
+          id_user: user.id
+        },
+        include: [{
+          model: this.image,
+          as: 'images'
+        }]
+      });
+
+      return prod;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  async findAllForOffer (id) {
+    try {
+      const prod = await this.product.findAll({
+        where: {
+          id_user: id
+        },
+        include: [{
+          model: this.image,
+          as: 'images'
+        }]
+      });
+
+      return prod;
+    } catch (e) {
+      throw e;
+    }
+  }
+
   async create (product, user) {
     product.id_user = user.id;
     try {

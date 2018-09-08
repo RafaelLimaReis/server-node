@@ -1,6 +1,8 @@
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 module.exports = (app) => {
+  app.use(cors());
   app.use((error, req, res, next) => {
     if (error) {
       res.status(500).json({ error: error });

@@ -27,6 +27,23 @@ class productController {
     }
   }
 
+  async allMe (user) {
+    try {
+      const response = await this.ProductService.findAllMe(user);
+      return responseHelpers.success(response, 'Products successfully returned');
+    } catch (e) {
+      throw e;
+    }
+  }
+  async allForOffer (id) {
+    try {
+      const response = await this.ProductService.findAllForOffer(id);
+      return responseHelpers.success(response, 'Products successfully returned');
+    } catch (e) {
+      throw e;
+    }
+  }
+
   /**
    * Função para criar um produto
    * @param {array} product
