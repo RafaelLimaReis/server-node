@@ -4,7 +4,7 @@
   "description": "chat e api em node para tcc",
   "main": "index.js",
   "scripts": {
-    "start": "npm run apiDoc && nodemon index.js",
+    "start": "nodemon index.js",
     "apiDoc": "apidoc -i api/routers/ -o public/apidoc"
   },
   "repository": {
