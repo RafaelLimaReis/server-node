@@ -19,9 +19,9 @@ class userController {
   /**
    * Função de retorno de usuarios
    */
-  async all () {
+  async all (user) {
     try {
-      const response = await this.userService.findAll();
+      const response = await this.userService.findAll(user);
       return responseHelpers.success(response, 'users successfully returned');
     } catch (e) {
       throw e;

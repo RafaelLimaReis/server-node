@@ -9,9 +9,15 @@ class UserService {
     this.address = address;
   }
 
-  async findAll () {
+  async findAll (data) {
     try {
-      const user = await this.user.findAll();
+      const user = await this.user.find({
+        where: {id: data.id},
+        include: [{
+          model: this.address,
+          as: 'address'
+        }]
+      });
       return user;
     } catch (e) {
       throw e;
@@ -104,7 +110,8 @@ class UserService {
     else return false;
   }
 
-  async __createAddress (address) {
+  async __createAddress (string) {
+    const address = JSON.parse(string);
     const findAddress = await this.address.findOne({
       where: {
         [Op.and]: [

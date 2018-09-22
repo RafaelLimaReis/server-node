@@ -35,6 +35,14 @@ class productController {
       throw e;
     }
   }
+  async listMe (user) {
+    try {
+      const response = await this.ProductService.listAllMe(user);
+      return responseHelpers.success(response, 'Products successfully returned');
+    } catch (e) {
+      throw e;
+    }
+  }
   async allForOffer (id) {
     try {
       const response = await this.ProductService.findAllForOffer(id);
@@ -48,11 +56,19 @@ class productController {
    * Função para criar um produto
    * @param {array} product
    */
-  async create (product, files, user) {
+  async create (product, user) {
     try {
       let response = await this.ProductService.create(product, user);
-      await this._insertImages(files, response.id);
       return responseHelpers.success(response, 'Products successfully created', 201);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  async createImages (body, files, user) {
+    try {
+      await this._insertImages(files, body.id);
+      return responseHelpers.success('Products successfully created', 201);
     } catch (e) {
       throw e;
     }
@@ -78,8 +94,8 @@ class productController {
   async update (product, files, user) {
     try {
       let newProduct = await this.ProductService.update(product, user);
-      if (files) await this.ImageService.deleteImages(newProduct.id);
-      await this._insertImages(files, newProduct.id);
+      //if (files) await this.ImageService.deleteImages(newProduct.id);
+      //await this._insertImages(files, newProduct.id);
       if (newProduct) return responseHelpers.success(newProduct, 'Product successfully updated');
       else return responseHelpers.notFound('Product not Found');
     } catch (e) {

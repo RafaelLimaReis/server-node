@@ -15,12 +15,22 @@ module.exports = (app) => {
         throw e.message;
       }
     })
-    .post(auth.authenticate, upload.array('images', 5), async (req, res, next) => {
+    .post(auth.authenticate, async (req, res, next) => {
       try {
-        res.locals = await product.create(req.body, req.files, req.user);
+        res.locals = await product.create(req.body, req.user);
         next();
       } catch (e) {
         throw e;
+      }
+    });
+
+  app.route('/images/product')
+    .post(upload.single('image'), async (req, res, next) => {
+      try {
+        res.locals = await product.createImages(req.body, req.file, req.user);
+        next();
+      } catch (error) {
+        throw error;
       }
     });
 
@@ -33,6 +43,16 @@ module.exports = (app) => {
         throw e.message;
       }
     })
+  app.route('/me/products/list')
+    .get(auth.authenticate, async (req, res, next) => {
+      try {
+        res.locals = await product.listMe(req.user);
+        next();
+      } catch (e) {
+        throw e.message;
+      }
+    })
+
   app.route('/other/:id/products')
     .get(auth.authenticate, async (req, res, next) => {
       try {
@@ -51,7 +71,7 @@ module.exports = (app) => {
         throw e;
       }
     })
-    .put(auth.authenticate, upload.array('images', 5), async (req, res, next) => {
+    .put(auth.authenticate, async (req, res, next) => {
       try {
         res.locals = await product.update(req, req.files, req.user);
         next();

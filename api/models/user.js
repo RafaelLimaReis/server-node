@@ -7,6 +7,9 @@ module.exports = (sequelize, dataType) => {
       primaryKey: true,
       autoIncrement: true
     },
+    id_oneSignal: {
+      type: dataType.STRING
+    },
     userName: {
       type: dataType.STRING(30),
       allowNull: false

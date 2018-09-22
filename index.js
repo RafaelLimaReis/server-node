@@ -1,5 +1,6 @@
 // variaveis de ambiente
 require('dotenv-safe').config();
+const oneSignal = require('onesignal-node');
 
 // dependencias do servidor
 const load = require('consign');
@@ -15,6 +16,7 @@ load()
   .then('./api/configs/middleware.js')
   .then('./api/routers')
   .then('./api/configs/info.js')
+  .then('./api/configs/oneSignal.js')
   .into(app)
 
 // start server

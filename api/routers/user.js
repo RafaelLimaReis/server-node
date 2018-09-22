@@ -9,7 +9,7 @@ module.exports = (app) => {
   app.route('/users')
     .get(auth.authenticate, async (req, res, next) => {
       try {
-        res.locals = await user.all();
+        res.locals = await user.all(req.user);
         next();
       } catch (e) {
         throw e;
@@ -24,7 +24,7 @@ module.exports = (app) => {
       }
     })
   app.route('/users/:id')
-    .put(auth.authenticate, upload.single('image'), async (req, res, next) => {
+    .put(upload.single('image'), async (req, res, next) => {
       try {
         res.locals = await user.update(req, req.file ? req.file : null);
         next();

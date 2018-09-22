@@ -8,12 +8,11 @@ class ImageService {
   async insertImages (data, id) {
     let _data = [];
 
-    data.forEach(element => {
-      _data.push({
-        id_product: id,
-        hash_name: element.filename
-      });
+    _data.push({
+      id_product: id,
+      hash_name: data.filename
     });
+
     await this._saveImage(_data);
 
     return _data;
